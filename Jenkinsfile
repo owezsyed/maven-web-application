@@ -7,7 +7,7 @@ echo "the job basename is: ${env.JOB_BASE_NAME}"
 echo "the build tag is: ${env.BUILD_TAG}" 
 echo "the build ID is: ${env.BUILD_ID}" 
 echo "the build number is: ${env.BUILD_NUMBER}" 
-
+ try{
 stage ('CheckoutCode'){
 git branch: 'development', credentialsId: '4ed1ce52-1588-4c71-83f4-9641f9992a73', url: 'https://github.com/owezsyed/maven-web-application.git'
 }
@@ -28,5 +28,37 @@ sshagent(['b093bacf-0c5b-41af-ab6f-784b0f809909']) {
 sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@52.66.127.13:/opt/apache-tomcat-9.0.64/webapps/"
 }
 } 
+ }
+ catch(e){
+  currentbuild.result = "FAILURE"
+  throw e
+ }
+ finally{
+  slacknotifications(currentbuild.result)
+ }
+}//NODE CLOSING
+def notifyBuild(String buildStatus = 'STARTED') {
+  // build status of null means successful
+  buildStatus =  buildStatus ?: 'SUCCESSFUL'
 
+  // Default values
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def summary = "${subject} (${env.BUILD_URL})"
+
+  // Override default values based on build status
+  if (buildStatus == 'STARTED') {
+    color = 'YELLOW'
+    colorCode = '#FFFF00'
+  } else if (buildStatus == 'SUCCESSFUL') {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
+
+  // Send notifications
+  slackSend (color: colorCode, message: summary)
 }
