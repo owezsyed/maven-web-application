@@ -8,7 +8,7 @@ echo "the build tag is: ${env.BUILD_TAG}"
 echo "the build ID is: ${env.BUILD_ID}" 
 echo "the build number is: ${env.BUILD_NUMBER}" 
  try{
-  slacknotifications"STARTED"
+  slacknotifications("STARTED")
 stage ('CheckoutCode'){
 git branch: 'development', credentialsId: '4ed1ce52-1588-4c71-83f4-9641f9992a73', url: 'https://github.com/owezsyed/maven-web-application.git'
 }
