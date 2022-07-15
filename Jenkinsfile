@@ -38,6 +38,7 @@ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15
   slacknotifications(currentBuild.result)
  }
 }//NODE CLOSING
+slack notifications
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
