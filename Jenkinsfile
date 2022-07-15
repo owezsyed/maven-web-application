@@ -34,7 +34,7 @@ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15
   throw e
  }
  finally{
-  slacknotifications(currentbuild.result)
+  notifyBuild(currentbuild.result)
  }
 }//NODE CLOSING
 def notifyBuild(String buildStatus = 'STARTED') {
