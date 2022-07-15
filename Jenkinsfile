@@ -8,7 +8,7 @@ echo "the build tag is: ${env.BUILD_TAG}"
 echo "the build ID is: ${env.BUILD_ID}" 
 echo "the build number is: ${env.BUILD_NUMBER}" 
  try{
-  slacknotifications("STARTED")
+ notifyBuild ("STARTED")
 stage ('CheckoutCode'){
 git branch: 'development', credentialsId: '4ed1ce52-1588-4c71-83f4-9641f9992a73', url: 'https://github.com/owezsyed/maven-web-application.git'
 }
@@ -35,10 +35,9 @@ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15
   throw e
  }
  finally{
-  slacknotifications(currentBuild.result)
+notifyBuild(currentBuild.result)
  }
 }//NODE CLOSING
-slack notifications
 def notifyBuild(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
