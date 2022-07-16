@@ -2,6 +2,7 @@ pipeline{
 agent any
 tools{
 maven "maven 3.8.5"
+}
 triggers {
   pollSCM '* * * * *'
   cron '* * * * *'
@@ -11,7 +12,7 @@ options {
     buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
 }
 
-}
+
 stages{
 //code from GitHub
 stage('CheckoutCode'){
@@ -46,7 +47,7 @@ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15
 }
     }
 }
-}//tools closing
+}//stages closing
 post {
   success {
    slacknotification(currentBuild.result)
