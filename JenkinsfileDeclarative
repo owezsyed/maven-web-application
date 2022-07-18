@@ -1,5 +1,7 @@
 pipeline{
-agent any
+agent{
+label "nodes"
+}
 parameters {
   choice choices: ['development', 'master', 'uat', 'qa'], description: 'select BranchName', name: 'BranchName'
 }
