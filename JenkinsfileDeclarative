@@ -46,7 +46,7 @@ stage('ExecutetoSonarQube'){
 stage('deployintoapplicationserver'){
     steps{
         sshagent(['b093bacf-0c5b-41af-ab6f-784b0f809909']) {
-sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@35.154.98.138:/opt/apache-tomcat-9.0.64/webapps/"
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@http://35.154.98.138/:/opt/apache-tomcat-9.0.64/webapps/"
 }
     }
 }
